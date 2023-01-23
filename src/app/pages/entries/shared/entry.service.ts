@@ -7,6 +7,8 @@ import {map, catchError, flatMap} from 'rxjs/operators';
 
 import { Entry } from './entry.model';
 
+import { CategoryService } from '../../categories/shared/category.service';
+
 // Para deixar visivel para toda a aplicação
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class EntryService {
   private apiPath: string = "api/entries";
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private categoryService: CategoryService
   ) { }
 
   getAll(): Observable<Entry[]> {
@@ -38,22 +41,37 @@ export class EntryService {
   }
 
   create(entry: Entry): Observable<Entry> {
-    // Fazendo a criação de uma categoria / entry -> obj body da rota
-    return this.http.post(this.apiPath, entry).pipe(
-      catchError(this.handleError),
-      map(this.jsonDataToEntry)
+    // entry.categoryId;
+    // entry.category = category
+    return this.categoryService.getById(Number(entry.categoryId)).pipe(
+      flatMap(category => {
+        entry.category = category;
+
+        // Fazendo a criação de uma categoria / entry -> obj body da rota
+        return this.http.post(this.apiPath, entry).pipe(
+          catchError(this.handleError),
+          map(this.jsonDataToEntry)
+        )
+      })
     )
   }
 
   update(entry: Entry): Observable<Entry> {
     const url = `${this.apiPath}/${entry.id}`;
     // Passando a url + o objeto que será atualizado essas infos, viram do front
-    return this.http.put(url, entry).pipe(
-      catchError(this.handleError),
-      // Por conta do in-memory na atualização ele não retorna nada, por isso não será tratado
-      // ou seja aqui retornamos o mesmo objeto.
-      map(() => entry)
+    return this.categoryService.getById(Number(entry.categoryId)).pipe(
+      flatMap(category => {
+        entry.category = category;
+
+        return this.http.put(url, entry).pipe(
+          catchError(this.handleError),
+          // Por conta do in-memory na atualização ele não retorna nada, por isso não será tratado
+          // ou seja aqui retornamos o mesmo objeto.
+          map(() => entry)
+        )
+      })
     )
+
   }
 
   delete(id: number): Observable<any> {

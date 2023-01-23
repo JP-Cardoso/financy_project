@@ -65,7 +65,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked{
     private categoryService: CategoryService
 
   ){
-
+   
   }
 
   ngOnInit(): void {
@@ -119,6 +119,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked{
       paid: [true, [Validators.required]],
       categoryId: [null, [Validators.required]]
     })
+
   }
 
   private loadEntry() {
