@@ -6,6 +6,9 @@ const routes: Routes = [
   {
     path: 'categories',
     loadChildren: () => import('./pages/categories/categories.module').then(m => m.CategoriesModule)
+  }, {
+    path: 'entries',
+    loadChildren: () => import('./pages/entries/entries.module').then(e => e.EntriesModule)
   }
 ];
 

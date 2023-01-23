@@ -70,17 +70,24 @@ export class EntryService {
   // Ele vai receber do servidor, um array de objetos com as categorias,
   // onde será convertido para categoria.
   private jsonDataToEntries(jsonData: any[]): Entry[] {
-    // Aqui o array está vazio, e ele será alimentado pelo forEach com a categoria
-    const entries: Entry[] = [];
-    jsonData.forEach(element => entries.push(element as Entry));
+    //console.log(jsonData[0] as Entry); Objeto generico
+    //console.log(Object.assign(new Entry, jsonData[1]));
 
-    return entries
+
+    // Aqui o array está vazio, e ele será alimentado pelo forEach com as entradas
+    const entries: Entry[] = [];
+    jsonData.forEach(element => {
+      const entry = Object.assign(new Entry(), element);
+      entries.push(entry);
+    });
+
+    return entries;
   }
 
   // Retornando apenas uma categoria, por não ser um array
   // ele retorna um objeto do tipo any.
   private jsonDataToEntry(jsonData: any): Entry {
-    return jsonData as Entry;
+    return Object.assign(new Entry(), jsonData);
   }
 
   private handleError(error: any): Observable<any> {
