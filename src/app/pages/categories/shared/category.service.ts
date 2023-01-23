@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-// tratamento de erros 
+// tratamento de erros
 import {map, catchError, flatMap} from 'rxjs/operators';
 
 import { Category } from './category.models';
 
+// Para deixar visivel para toda a aplicação
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,7 @@ export class CategoryService {
       catchError(this.handleError),
       map(this.jsonDataToCategories)
     )
-  } 
+  }
 
   getById(id: number): Observable<Category> {
     // Montando a url que vai buscar uma categoria pelo id
