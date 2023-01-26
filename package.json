@@ -21,6 +21,7 @@
     "angular-imask": "^6.4.3",
     "angular-in-memory-web-api": "^0.15.0",
     "bootstrap": "4.0.0",
+    "node": "^18.13.0",
     "primeicons": "^6.0.1",
     "primeng": "^15.0.1",
     "rxjs": "~7.8.0",
