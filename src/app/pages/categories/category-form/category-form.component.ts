@@ -29,7 +29,7 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category>{
     })
   }
 
-  protected override creationPageTitle(): string {
+  protected override  creationPageTitle(): string {
     return 'Cadastro de nova Categoria'
   };
 
