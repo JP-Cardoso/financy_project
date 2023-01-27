@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from "@angular/common/http";
+
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from "@angular/common/http";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Interceptador http do angular. Ele fará o papel de mostrar
 // para o angular, que a API está interna e não externa

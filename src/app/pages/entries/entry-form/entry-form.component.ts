@@ -15,6 +15,7 @@ import { BaseResourceFormComponent } from 'src/app/shared/components/base-resour
   styleUrls: ['./entry-form.component.css']
 })
 export class EntryFormComponent extends BaseResourceFormComponent<Entry>{
+  
   categories?: Array<Category>;
 
   imaskConfig = {
