@@ -11,20 +11,6 @@
   button-class="btn-light"
 ></app-page-header>
 
-
-<!-- <div class="row mb-5">
-  <div class="col-md-9">
-    <h1 class="h2 border-left pl-2">
-     {{pageTitle}}
-    </h1>
-  </div>
-  <div class="col-md-3">
-    <a routerLink="/entries" class="btn btn-light float-right">
-      << Voltar
-    </a>
-  </div>
-</div> -->
-
 <form [formGroup]="resourceForm" (submit)="submitForm()">
   <div class="card">
     <div class="card-header">
@@ -40,10 +26,8 @@
           <select name="type" id="type" formControlName="type" class="form-control">
             <option *ngFor="let option of typeOptions" [ngValue]="option.value">{{option.text}}</option>
           </select>
-
-          <div class="text-danger" *ngIf="resourceForm.get('type')?.invalid && resourceForm.get('type')?.touched">
-            <div *ngIf="resourceForm.get('type')?.errors?.['required']">Dado Obrigatório</div>
-          </div>
+         
+          <app-form-field-error [form-control]="resourceForm.get('type')"></app-form-field-error>
         </div>
 
         <!-- Name -->
@@ -51,10 +35,9 @@
           <label for="name">Lançamento:</label>
           <input type="text" class="form-control" id="name" formControlName="name">
 
-          <div class="text-danger" *ngIf="resourceForm.get('name')?.invalid && resourceForm.get('name')?.touched">
-            <div *ngIf="resourceForm.get('name')?.errors?.['required']">Dado Obrigatório</div>
-            <div *ngIf="resourceForm.get('name')?.errors?.['minlength'] ">Deve ter no mínimo 2 caracteres </div>
-          </div>
+          <!-- <app-form-field-error [form-control]="resourceForm.get('name')"></app-form-field-error> -->
+         
+
         </div>
 
         <!-- Amount -->
