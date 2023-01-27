@@ -1,14 +1,18 @@
 <!-- Migalha de pão -> Home / Categorias-->
-<nav class="mb-5">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a routerLink="/">Home</a>
-    </li>
-    <li class="breadcrumb-item active">
-      Lançamentos
-    </li>
-  </ol>
-</nav>
+<app-bread-crumb
+  [items]="[{text: 'Lançamentos'}]"
+></app-bread-crumb>
+
+<!-- <nav class="mb-5"> -->
+  <!-- <ol class="breadcrumb"> -->
+    <!-- <li class="breadcrumb-item"> -->
+      <!-- <a routerLink="/">Home</a> -->
+    <!-- </li> -->
+    <!-- <li class="breadcrumb-item active"> -->
+      <!-- Lançamentos -->
+    <!-- </li> -->
+  <!-- </ol> -->
+<!-- </nav> -->
 
 <div class="row mb-5">
   <div class="col-md">
