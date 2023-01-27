@@ -1,36 +1,21 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
-
+import { Component, Injector, OnInit } from '@angular/core';
 // Tudos os imports que vão mexer com o formulário
-import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-
-// Todos os imports para questão de rotas
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { Validators} from '@angular/forms';
 // As classes referentes com o recurso que estamos trabalhando aqui
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
 import { Category } from '../../categories/shared/category.models';
 import { CategoryService } from '../../categories/shared/category.service';
-// Um operador do rxjs
-import { switchMap } from 'rxjs/operators';
 
-import * as toastr from 'toastr';
+import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
 
 @Component({
   selector: 'app-entry-form',
   templateUrl: './entry-form.component.html',
   styleUrls: ['./entry-form.component.css']
 })
-export class EntryFormComponent implements OnInit, AfterContentChecked{
-
-  currentAction!: string;
-  entryForm!: FormGroup;
-  pageTitle!: string;
-  serverErrorMessage!: string[];
-  submittingForm: boolean = false;
-  entry: Entry = new Entry();
+export class EntryFormComponent extends BaseResourceFormComponent<Entry>{
   categories?: Array<Category>;
-
 
   imaskConfig = {
     mask: Number,
@@ -58,36 +43,23 @@ export class EntryFormComponent implements OnInit, AfterContentChecked{
 
 
   constructor(
-    private entryService: EntryService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private categoryService: CategoryService
-
+    protected entryService: EntryService,
+    protected categoryService: CategoryService,
+    protected override injector: Injector
   ){
-   
+   super(injector, new Entry(), entryService, Entry.fromJson)
   }
 
-  ngOnInit(): void {
-    this.setCurrentAction();
-    this.buildEntryForm();
-    this.loadEntry();
+  override ngOnInit(): void {
     this.loadCategories();
+    super.ngOnInit();
   }
 
-  ngAfterContentChecked(): void {
-    this.setPageTitle();
-  }
-
-  submitForm() {
-    // Quando o usuario clicar em salvar
-    this.submittingForm = true;
-    if(this.currentAction == 'new') {
-      this.createEntry();
-    } else {
-      this.updateEntry();
+  private loadCategories() {
+      this.categoryService.getAll().subscribe(
+        categories => this.categories = categories
+      )
     }
-  }
 
   // Ele vai me retornar um objeto com os parametros que seram exibidos
   get typeOptions(): Array<any> {
@@ -101,15 +73,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked{
     )
   }
 
-  // Private methods
-  private setCurrentAction() {
-    // Aqui ele retorna um array com a rota a partir do caminho base
-    this.route.snapshot.url[0].path == 'new' ? this.currentAction = 'new' : this.currentAction = 'edit'
-  }
-
-  private buildEntryForm() {
-    // Construindo o formulŕio da categória.
-    this.entryForm = this.formBuilder.group({
+  protected buildResourceForm() {
+    this.resourceForm = this.formBuilder.group({
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
       description: [null],
@@ -119,91 +84,16 @@ export class EntryFormComponent implements OnInit, AfterContentChecked{
       paid: [true, [Validators.required]],
       categoryId: [null, [Validators.required]]
     })
-
   }
 
-  private loadEntry() {
-    // Virfica a ação atual
-    if(this.currentAction == 'edit') {
-      // Fazer uma req no server, para trazer a categoria que está sendo editada.
-      // O paramMap é um observable
-      this.route.paramMap.pipe(
-        switchMap(params => (this.entryService.getById(Number(params.get("id")))))
-      )
-      .subscribe( //Subscrevendo algo que veio da requisição.
-        (entry) => {
-          this.entry = entry;
-          // Setando um novo formulário de categoria
-          this.entryForm.patchValue(this.entry);
-        },
-        (error) => alert('Ocorreu um erro no servidor, tente mais tarde')
-      )
-    }
-  }
+ protected override creationPageTitle(): string {
+   return 'Cadastro de Novo Lançamento'
+ }
 
-  private loadCategories() {
-    this.categoryService.getAll().subscribe(
-      categories => this.categories = categories
-    )
-  }
-
-  private setPageTitle() {
-    if(this.currentAction == 'new') {
-      this.pageTitle = 'Cadastro de Novo Lançamento'
-    } else {
-      const entryName = this.entry.name || ''
-      this.pageTitle = `Editando Lançamento: ${entryName}`
-    }
-  }
-
-  private createEntry() {
-    // Ele vai criar um obj do tipo Entry, e enviar essa categoria atráves do service
-    // const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
-    const entry: Entry = Entry.fromJson(this.entryForm.value)
-
-    this.entryService.create(entry).subscribe(
-      entry => this.actionsForSuccess(entry),
-      error=> this.actionsForError(error)
-    )
-
-  }
-
-  private updateEntry() {
-    const entry: Entry = Entry.fromJson(this.entryForm.value)
-
-    this.entryService.update(entry).subscribe(
-      entry => this.actionsForSuccess(entry),
-      error=> this.actionsForError(error)
-    )
-  }
-
-  private actionsForSuccess(entry: Entry) {
-    toastr.success("Solicitação processada com sucesso");
-
-    // redirect/reload component page
-    this.router.navigateByUrl("entries", {skipLocationChange: true}).then(
-      () => this.router.navigate(["entries", entry.id, "edit"])
-    )
-    /*
-    nomedosite.com/entries/new
-    nomedosite.com/entries/
-    nomedosite.com/entries/:id/edit
-    O skipLocationChange indica, para não adicionar essa navegação para o entries no histórico de navegação
-    */
-  }
-
-  private actionsForError(error: any) {
-    toastr.error("Ocorreu um erro ao processar a sua solicitação");
-    this.submittingForm = false;
-
-    if(error.status == 422) {
-      //Retorna um array com a menssagem de erros
-      this.serverErrorMessage = JSON.parse(error._body).errors;
-    } else {
-      this.serverErrorMessage = ["Falha na comunicação com o servidor. Por favor, tente mais tarde"]
-    }
-
-  }
+ protected override editionPageTitle(): string {
+   const categoryName = this.resource.name || '';
+   return "Editando um Lançamento"
+ }
 
 
 }

@@ -1,4 +1,4 @@
-import {OnInit, AfterContentChecked, Injector } from '@angular/core';
+import {OnInit, AfterContentChecked, Injector, Directive } from '@angular/core';
 // Tudos os imports que vão mexer com o formulário
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 // Todos os imports para questão de rotas
@@ -11,8 +11,8 @@ import { BaseResourceService } from '../../service/base-resource.service';
 
 import * as toastr from 'toastr';
 
+@Directive()
 export abstract class BaseResourceFormComponent<T extends BaseResourceModel> implements OnInit, AfterContentChecked{
-
   currentAction!: string;
   resourceForm!: FormGroup;
   pageTitle!: string;
@@ -145,7 +145,5 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
 
   }
 
-  protected abstract buildResourceForm(): void [
-    
-  ]
+  protected abstract buildResourceForm():void  
 }
