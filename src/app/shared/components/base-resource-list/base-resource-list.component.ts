@@ -8,7 +8,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
 
   //Esse cara vai receber todas aa despesas e receitas
   resources: T[] = [];
-    alert: any;
+    
 
   constructor(
     //Aqui é uma injeção de depêndecia
@@ -21,7 +21,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     // Aqui ele está pegando a lista de categorias e as exibindo
    this.resourceService.getAll().subscribe(
     resources => this.resources = resources.sort((a:any, b:any) => b.id - a.id),
-    error => this.alert('Erro ao carregar a lista')
+    error => alert('Erro ao carregar a lista')
    )
   }
 
@@ -32,7 +32,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     if(mustDelete) {
       this.resourceService.delete(Number(resource.id)).subscribe(
         () => this.resources = this.resources.filter((element) => element != resource),
-        () => this.alert('Erro ao tentar excluir')
+        () => alert('Erro ao tentar excluir')
       )
     }
 
