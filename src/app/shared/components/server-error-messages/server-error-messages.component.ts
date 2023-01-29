@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ServerErrorMessagesComponent {
 
-  @Input('server-error-messages') serverErrorMessage: string[] = [];
+  @Input('server-error-messages') serverErrorMessage!: string;
 }

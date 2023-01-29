@@ -16,7 +16,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   currentAction!: string;
   resourceForm!: FormGroup;
   pageTitle!: string;
-  serverErrorMessage!: string[];
+  serverErrorMessage!: string[]; //Base do erro está aqui.
   submittingForm: boolean = false;
   
   protected route: ActivatedRoute;
@@ -58,7 +58,11 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
   // protected methods
   protected setCurrentAction() {
     // Aqui ele retorna um array com a rota a partir do caminho base
-    this.route.snapshot.url[0].path == 'new' ? this.currentAction = 'new' : this.currentAction = 'edit'
+    if(this.route.snapshot.url[0].path == 'new'){
+       this.currentAction = 'new'
+    } else {
+       this.currentAction = 'edit'
+    }
   }
 
 
@@ -112,7 +116,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
 
     this.resourceService.update(resource).subscribe(
       resource => this.actionsForSuccess(resource),
-      error=> this.actionsForError(error)
+      error => this.actionsForError(error)
     )
   }
 
@@ -139,11 +143,10 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     if(error.status == 422) {
       //Retorna um array com a menssagem de erros
       this.serverErrorMessage = JSON.parse(error._body).errors;
-    } else {
-      this.serverErrorMessage = ["Falha na comunicação com o servidor. Por favor, tente mais tarde"]
+    }  else {
+      this.serverErrorMessage = ["Falha na comunicação com o servidor. Por favor, tente mais tarde."]
     }
-
   }
 
-  protected abstract buildResourceForm():void  
+  protected abstract buildResourceForm(): void;
 }
