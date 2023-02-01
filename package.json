@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.1.1",
-    "@angular/cli": "~15.1.1",
     "@angular/compiler-cli": "^15.1.0",
     "@types/currency-formatter": "^1.5.1",
     "@types/jasmine": "~4.3.0",
