@@ -103,16 +103,16 @@ export class ReportsComponent implements OnInit {
       );
 
       // Se por acaso for encontrados lançamneto, some-os e os mostre no gráfico
-      if(filteredEntries.length > 0){
-        const totalAmount = filteredEntries.reduce(
-          (total, entry) => total + currencyFormatter.unformat(entry.amount, { code: 'BRL' }), 0
-        )
+      // if(filteredEntries.length > 0){
+      //   const totalAmount = filteredEntries.reduce(
+      //     (total, entry) => total + currencyFormatter.unformat(entry.amount, { code: 'BRL' }), 0
+      //   )
 
-        chartData.push({
-          categoryName: category.name,
-          totalAmount: totalAmount
-        })
-      }
+      //   chartData.push({
+      //     categoryName: category.name,
+      //     totalAmount: totalAmount
+      //   })
+      // }
     })
 
 
