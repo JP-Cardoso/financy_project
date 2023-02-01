@@ -7,7 +7,7 @@ export class Entry extends BaseResourceModel{
     public name?: string,
     public description?: string,
     public type?: string, //Se vai dizer se é dispesa ou entrada
-    public amount?: string,
+    public amount: string = '',
     public date?: string,
     public paid?: boolean,
     public categoryId?: number,

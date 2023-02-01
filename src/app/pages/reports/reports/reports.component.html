@@ -15,8 +15,8 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-7">
-                <label for="mounth">Mês</label>
-                <select #mounth name="mounth" id="mounth" class="form-control">
+                <label for="month">Mês</label>
+                <select #month name="month" id="month" class="form-control">
                     <option value="">Selecione um mês</option>
                     <option value="1">Janeiro</option>
                     <option value="2">Fevereiro</option>
@@ -47,9 +47,9 @@
 
         <div class="form-row">
             <div class="col-md">
-                <!-- <button type="button" (click)="generateReports()" class="btn btn-primary float-right"> -->
+                <button type="button" (click)="generateReports()" class="btn btn-primary float-right">
                     Gerar Relatórios
-                <!-- </button> -->
+                </button>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="card-body">
             <h3 class="card-title">
-                1500
+                {{revenueTotal}}
             </h3>
         </div>
     </div>
@@ -72,7 +72,7 @@
         </div>
         <div class="card-body">
             <h3 class="card-title">
-                500
+                {{expenseTotal}}
             </h3>
         </div>
     </div>
@@ -82,7 +82,7 @@
         </div>
         <div class="card-body">
             <h3 class="card-title">
-                1000
+                {{balance}}
             </h3>
         </div>
     </div>
@@ -90,11 +90,11 @@
 
 <hr>
 <div class="row mt-5 mb-4">
-    <div class="col-md-6">
-        Gráfico de Receitas
+    <div class="card col-md-6">
+        <p-chart type="bar" [data]="revenueChartData" [options]="chartOptions"></p-chart>
     </div>
 
-    <div class="col-md-6">
-        Gráfico de Despesas
+    <div class="card col-md-6">
+        <p-chart type="bar" [data]="expenseChartData" [options]="chartOptions"></p-chart>
     </div>
 </div>
