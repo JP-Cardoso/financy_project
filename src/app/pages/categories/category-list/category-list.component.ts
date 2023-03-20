@@ -19,5 +19,4 @@ export class CategoryListComponent extends BaseResourceListComponent<Category>{
     super(categoryService, )
   }
 
-
 }
